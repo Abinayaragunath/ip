@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IP Location Finder</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* Basic styling with slightly smaller fonts */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 16px;
+      background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: -1;
+    }
+    .page {
+      display: none;
+      max-width: 750px;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 40px;
+      margin: 60px auto;
+      color: #ffffff;
+      animation: fadeIn 0.6s ease;
+    }
+    .active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1, h2 {
+      text-align: center;
+      color: #00e5ff;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+    .input-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    input[type="text"], input[type="email"], input[type="number"] {
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1.5px solid #80deea;
+      width: 300px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #263238;
+    }
+    input:focus {
+      border-color: #00bcd4;
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 188, 212, 0.4);
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #00bcd4;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background-color: #008ba3;
+      transform: scale(1.03);
+    }
+    #result {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 12px;
+      color: #263238;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+    #map {
+      height: 450px;
+      margin-top: 30px;
+      border-radius: 12px;
+      border: 2px solid #00e5ff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page 0: OTP Login -->
+  <div id="page0" class="page active">
+    <h1>🔐 Login with OTP</h1>
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Enter email" />
+      <button onclick="sendOTP()">Send OTP</button>
+    </div>
+    <div class="input-group">
+      <input type="text" id="otpInput" placeholder="Enter OTP" />
+      <button onclick="verifyOTP()">Verify ➜</button>
+    </div>
+    <p id="otpMsg" style="text-align:center; color:#fff; font-size:16px;"></p>
+  </div>
+
+  <!-- Page 1: Enter IP -->
+  <div id="page1" class="page">
+    <h1>🌍 IP Location Finder</h1>
+    <div class="input-group">
+      <input type="text" id="ipInput" placeholder="Enter an IP address (e.g. 8.8.8.8)">
+      <button onclick="goToPage2()">Next ➜</button>
+    </div>
+  </div>
+
+  <!-- Page 2: Show IP Info -->
+  <div id="page2" class="page">
+    <h2>📄 IP Details</h2>
+    <div id="result">Loading...</div>
+    <div style="text-align: center; margin-top: 25px;">
+      <button onclick="goToPage3()">View on Map 🗺️</button>
+    </div>
+  </div>
+
+  <!-- Page 3: Show Map -->
+  <div id="page3" class="page">
+    <h2>📍 Map Location</h2>
+    <div id="map"></div>
+    <div style="text-align: center; margin-top: 25px;">
+      <button onclick="goToPage4()">Continue ➜</button>
+    </div>
+  </div>
+
+  <!-- Page 4: Completion -->
+  <div id="page4" class="page">
+    <h2>✅ You're Done!</h2>
+    <p style="text-align:center; font-size:16px; color:#fff;">
+      Thank you for using the IP Location Finder!<br>
+      You may download your report, restart, or exit.
+    </p>
+    <div style="text-align:center; margin-top:20px;">
+      <button onclick="downloadPDF()">📄 Download PDF</button>
+    </div>
+    <div style="text-align:center; margin-top:20px;">
+      <button onclick="restart()">🔁 Start Over</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    let lat, lon;
+    let generatedOTP = "";
+
+    function showPage(n) {
+      document.querySelectorAll('.page').forEach((page, i) => {
+        page.classList.remove('active');
+        if (i === n) page.classList.add('active');
+      });
+    }
+
+    function sendOTP() {
+      const email = document.getElementById("email").value;
+      if (!email.includes("@")) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+      generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+      document.getElementById("otpMsg").innerText = `OTP sent (simulated): ${generatedOTP}`;
+    }
+
+    function verifyOTP() {
+      const entered = document.getElementById("otpInput").value.trim();
+      if (entered === generatedOTP) {
+        showPage(1);
+      } else {
+        alert("Incorrect OTP. Try again.");
+      }
+    }
+
+    function goToPage2() {
+      const ip = document.getElementById("ipInput").value.trim();
+      if (!ip) {
+        alert("⚠️ Please enter a valid IP address.");
+        return;
+      }
+      showPage(2);
+      document.getElementById("result").innerHTML = "Fetching location info...";
+      fetch(`http://ip-api.com/json/${ip}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "success") {
+            lat = data.lat;
+            lon = data.lon;
+            document.getElementById("result").innerHTML = `
+              <strong>IP:</strong> ${data.query}<br>
+              <strong>Country:</strong> ${data.country}<br>
+              <strong>Region:</strong> ${data.regionName}<br>
+              <strong>City:</strong> ${data.city}<br>
+              <strong>ZIP:</strong> ${data.zip}<br>
+              <strong>ISP:</strong> ${data.isp}<br>
+              <strong>Timezone:</strong> ${data.timezone}<br>
+              <strong>Latitude:</strong> ${data.lat}<br>
+              <strong>Longitude:</strong> ${data.lon}
+            `;
+          } else {
+            document.getElementById("result").innerHTML = `<span style="color:red;">Error: ${data.message}</span>`;
+          }
+        })
+        .catch(err => {
+          document.getElementById("result").innerHTML = `<span style="color:red;">Error fetching data</span>`;
+        });
+    }
+
+    function goToPage3() {
+      showPage(3);
+      setTimeout(() => {
+        const map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([lat, lon]).addTo(map).bindPopup("📍 IP Location").openPopup();
+      }, 100);
+    }
+
+    function goToPage4() {
+      showPage(4);
+    }
+
+    function restart() {
+      document.getElementById("email").value = "";
+      document.getElementById("otpInput").value = "";
+      document.getElementById("ipInput").value = "";
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("map").innerHTML = "";
+      document.getElementById("otpMsg").innerText = "";
+      showPage(0);
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(16);
+      doc.text("IP Location Report", 20, 20);
+      const content = document.getElementById("result").innerText;
+      const lines = doc.splitTextToSize(content, 180);
+      doc.setFontSize(12);
+      doc.text(lines, 20, 40);
+      doc.save("ip-location-report.pdf");
+    }
+  </script>
+</body>
+</html>
