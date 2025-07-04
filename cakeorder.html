@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CakeCorner – Order Cakes Online</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #fff0f5;
+      color: #333;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #e91e63;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.4rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 12px;
+      background-color: #e91e63;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d81b60;
+    }
+
+    .order-summary {
+      margin-top: 2rem;
+      background: #fce4ec;
+      padding: 1rem;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎂 Welcome to CakeCorner</h1>
+
+  <div class="container">
+    <label for="cake">Choose a Cake:</label>
+    <select id="cake">
+      <option value="">-- Select Cake --</option>
+      <option value="Chocolate Truffle">Chocolate Truffle – ₹500</option>
+      <option value="Black Forest">Black Forest – ₹450</option>
+      <option value="Red Velvet">Red Velvet – ₹550</option>
+      <option value="Fruit Cake">Fruit Cake – ₹400</option>
+    </select>
+
+    <label for="qty">Quantity:</label>
+    <input type="number" id="qty" min="1" max="10" value="1">
+
+    <label for="msg">Message on Cake:</label>
+    <input type="text" id="msg" placeholder="Happy Birthday, etc.">
+
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" placeholder="Customer Name">
+
+    <label for="address">Delivery Address:</label>
+    <textarea id="address" rows="3" placeholder="Full address"></textarea>
+
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" placeholder="10-digit number">
+
+    <button onclick="placeOrder()">Place Order</button>
+
+    <div id="summary" class="order-summary" style="display:none;"></div>
+  </div>
+
+  <script>
+    function placeOrder() {
+      const cake = document.getElementById('cake').value;
+      const qty = document.getElementById('qty').value;
+      const msg = document.getElementById('msg').value;
+      const name = document.getElementById('name').value;
+      const address = document.getElementById('address').value;
+      const phone = document.getElementById('phone').value;
+
+      if (!cake || !qty || !name || !address || !phone) {
+        alert("Please fill all the required fields.");
+        return;
+      }
+
+      const prices = {
+        "Chocolate Truffle": 500,
+        "Black Forest": 450,
+        "Red Velvet": 550,
+        "Fruit Cake": 400
+      };
+
+      const total = prices[cake] * qty;
+
+      document.getElementById("summary").style.display = "block";
+      document.getElementById("summary").innerHTML = `
+        <h3>🧁 Order Confirmed!</h3>
+        <b>Name:</b> ${name}<br>
+        <b>Cake:</b> ${cake}<br>
+        <b>Quantity:</b> ${qty}<br>
+        <b>Total Price:</b> ₹${total}<br>
+        <b>Message:</b> ${msg || "None"}<br>
+        <b>Delivery Address:</b> ${address}<br>
+        <b>Phone:</b> ${phone}<br>
+        <b>Status:</b> ✅ Confirmed
+      `;
+    }
+  </script>
+
+</body>
+</html>

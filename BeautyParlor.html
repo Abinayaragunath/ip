@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GlamUp Studio - Book Your Appointment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: linear-gradient(to right, #ffe4e1, #fff0f5);
+      color: #333;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #ffffffee;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      color: #c2185b;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 1rem;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      background-color: #ec407a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d81b60;
+    }
+
+    .confirmation {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #fce4ec;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>💄 GlamUp Studio</h1>
+    <form id="appointmentForm">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" placeholder="Enter your full name" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="text" id="phone" placeholder="Enter 10-digit phone number" required>
+
+      <label for="service">Select Service</label>
+      <select id="service" required>
+        <option value="">-- Choose Service --</option>
+        <option value="Haircut">Haircut</option>
+        <option value="Facial">Facial</option>
+        <option value="Makeup">Makeup</option>
+        <option value="Spa">Spa Treatment</option>
+        <option value="Nail Art">Nail Art</option>
+      </select>
+
+      <label for="date">Choose Date</label>
+      <input type="date" id="date" required>
+
+      <label for="time">Choose Time</label>
+      <input type="time" id="time" required>
+
+      <label for="notes">Additional Notes</label>
+      <textarea id="notes" rows="3" placeholder="Any preference or special request..."></textarea>
+
+      <button type="submit">Book Appointment</button>
+    </form>
+
+    <div class="confirmation" id="confirmation" style="display:none;"></div>
+  </div>
+
+  <script>
+    document.getElementById("appointmentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const service = document.getElementById("service").value;
+      const date = document.getElementById("date").value;
+      const time = document.getElementById("time").value;
+      const notes = document.getElementById("notes").value;
+
+      if (!name || !phone || !service || !date || !time) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      const confirmationDiv = document.getElementById("confirmation");
+      confirmationDiv.style.display = "block";
+      confirmationDiv.innerHTML = `
+        <h3>📋 Appointment Confirmed!</h3>
+        <strong>Name:</strong> ${name}<br>
+        <strong>Phone:</strong> ${phone}<br>
+        <strong>Service:</strong> ${service}<br>
+        <strong>Date:</strong> ${date}<br>
+        <strong>Time:</strong> ${time}<br>
+        <strong>Notes:</strong> ${notes || 'None'}<br>
+        <strong>Status:</strong> ✅ Confirmed! Our team will contact you soon.
+      `;
+
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>

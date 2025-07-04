@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AirSky – Flight Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #004e92, #000428);
+      color: white;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00e5ff;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.3rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 2rem;
+      padding: 12px;
+      background-color: #00e5ff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00bcd4;
+    }
+
+    .confirmation {
+      background: #fff;
+      color: #222;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛫 AirSky - Book Your Flight</h1>
+
+  <div class="container">
+    <label for="from">From Airport:</label>
+    <select id="from">
+      <option value="">-- Select --</option>
+      <option>Delhi (DEL)</option>
+      <option>Mumbai (BOM)</option>
+      <option>Bangalore (BLR)</option>
+      <option>Kolkata (CCU)</option>
+    </select>
+
+    <label for="to">To Airport:</label>
+    <select id="to">
+      <option value="">-- Select --</option>
+      <option>Chennai (MAA)</option>
+      <option>Hyderabad (HYD)</option>
+      <option>Pune (PNQ)</option>
+      <option>Ahmedabad (AMD)</option>
+    </select>
+
+    <label for="date">Departure Date:</label>
+    <input type="date" id="date">
+
+    <label for="class">Class:</label>
+    <select id="class">
+      <option value="">-- Select --</option>
+      <option>Economy</option>
+      <option>Business</option>
+    </select>
+
+    <label for="name">Passenger Name:</label>
+    <input type="text" id="name" placeholder="Full Name">
+
+    <label for="email">Email:</label>
+    <input type="text" id="email" placeholder="example@email.com">
+
+    <label for="seats">Number of Tickets:</label>
+    <input type="number" id="seats" min="1" max="6" placeholder="1">
+
+    <button onclick="bookFlight()">Book Flight</button>
+
+    <div id="confirmation" class="confirmation" style="display:none;"></div>
+  </div>
+
+  <script>
+    function bookFlight() {
+      const from = document.getElementById('from').value;
+      const to = document.getElementById('to').value;
+      const date = document.getElementById('date').value;
+      const travelClass = document.getElementById('class').value;
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const seats = document.getElementById('seats').value;
+
+      if (!from || !to || !date || !travelClass || !name || !email || !seats) {
+        alert("❗ Please fill out all fields!");
+        return;
+      }
+
+      const confirmation = document.getElementById("confirmation");
+      confirmation.style.display = "block";
+      confirmation.innerHTML = `
+        <h3>✈️ Flight Booking Confirmed!</h3>
+        <b>Name:</b> ${name}<br>
+        <b>Email:</b> ${email}<br>
+        <b>From:</b> ${from}<br>
+        <b>To:</b> ${to}<br>
+        <b>Date:</b> ${date}<br>
+        <b>Class:</b> ${travelClass}<br>
+        <b>Tickets:</b> ${seats}<br>
+        <b>Status:</b> ✅ Confirmed
+      `;
+    }
+  </script>
+
+</body>
+</html>

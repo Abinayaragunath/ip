@@ -1,0 +1,26 @@
+body {
+font-family: Arial, sans-serif;
+background: grey;
+display: flex;
+justify-content: center;
+padding-top: 50px;
+}
+.container {
+background: white;
+padding:20px 40px;
+border-radius: 8px;
+width: 300px;
+}
+input{
+width: 100%;
+margin-bottom: 10px;
+padding: 10px;
+border: 1px solid #ddd;
+border-radius: 4px;
+}
+.btn {
+margin-left:15px;
+align:center;
+background: #28a745;
+border-radius: 4px;
+}

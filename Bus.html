@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BusGo - Online Bus Ticket Booking</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #2c3e50, #3498db);
+      color: #fff;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.1);
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      padding: 12px;
+      width: 100%;
+      background: #00e5ff;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00c3d6;
+    }
+
+    .summary {
+      margin-top: 2rem;
+      background: #fff;
+      color: #333;
+      padding: 1rem;
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚌 BusGo - Online Ticket Booking</h1>
+
+  <div class="form-container">
+    <label for="from">From:</label>
+    <select id="from">
+      <option value="">-- Select Source --</option>
+      <option>Chennai</option>
+      <option>Bangalore</option>
+      <option>Hyderabad</option>
+      <option>Delhi</option>
+    </select>
+
+    <label for="to">To:</label>
+    <select id="to">
+      <option value="">-- Select Destination --</option>
+      <option>Mumbai</option>
+      <option>Pune</option>
+      <option>Kolkata</option>
+      <option>Ahmedabad</option>
+    </select>
+
+    <label for="date">Travel Date:</label>
+    <input type="date" id="date">
+
+    <label for="seats">Number of Seats:</label>
+    <input type="number" id="seats" min="1" max="10">
+
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" placeholder="Your name">
+
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" placeholder="Mobile number">
+
+    <button onclick="bookTicket()">Book Ticket</button>
+
+    <div id="summary" class="summary" style="display:none;"></div>
+  </div>
+
+  <script>
+    function bookTicket() {
+      const from = document.getElementById('from').value;
+      const to = document.getElementById('to').value;
+      const date = document.getElementById('date').value;
+      const seats = document.getElementById('seats').value;
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const summary = document.getElementById('summary');
+
+      if (!from || !to || !date || !seats || !name || !phone) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      summary.style.display = "block";
+      summary.innerHTML = `
+        <h3>🎫 Booking Summary</h3>
+        <b>Name:</b> ${name}<br>
+        <b>Phone:</b> ${phone}<br>
+        <b>From:</b> ${from}<br>
+        <b>To:</b> ${to}<br>
+        <b>Travel Date:</b> ${date}<br>
+        <b>Seats Booked:</b> ${seats}<br>
+        <b>Status:</b> ✅ Confirmed
+      `;
+    }
+  </script>
+
+</body>
+</html>

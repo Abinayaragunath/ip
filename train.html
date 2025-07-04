@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TrainTrack - Online Train Reservation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #2c5364);
+      color: #fff;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #00e5ff;
+    }
+
+    .form-box {
+      background: rgba(255, 255, 255, 0.08);
+      max-width: 700px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    select, input[type="text"], input[type="date"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      padding: 12px;
+      width: 100%;
+      background: #00e5ff;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00bcd4;
+    }
+
+    .summary {
+      margin-top: 2rem;
+      background: #fff;
+      color: #333;
+      padding: 1rem;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚆 TrainTrack - Train Reservation</h1>
+
+  <div class="form-box">
+    <label for="from">From Station:</label>
+    <select id="from">
+      <option value="">-- Select --</option>
+      <option>Chennai</option>
+      <option>Delhi</option>
+      <option>Mumbai</option>
+      <option>Kolkata</option>
+    </select>
+
+    <label for="to">To Station:</label>
+    <select id="to">
+      <option value="">-- Select --</option>
+      <option>Bangalore</option>
+      <option>Pune</option>
+      <option>Ahmedabad</option>
+      <option>Hyderabad</option>
+    </select>
+
+    <label for="date">Travel Date:</label>
+    <input type="date" id="date">
+
+    <label for="class">Class:</label>
+    <select id="class">
+      <option value="">-- Select --</option>
+      <option>Sleeper</option>
+      <option>AC 3 Tier</option>
+      <option>AC 2 Tier</option>
+      <option>First Class</option>
+    </select>
+
+    <label for="passenger">Passenger Name:</label>
+    <input type="text" id="passenger" placeholder="Enter your name">
+
+    <label for="age">Passenger Age:</label>
+    <input type="number" id="age" min="1" max="100">
+
+    <label for="seats">Number of Tickets:</label>
+    <input type="number" id="seats" min="1" max="6">
+
+    <button onclick="bookTrain()">Book Ticket</button>
+
+    <div id="summary" class="summary" style="display: none;"></div>
+  </div>
+
+  <script>
+    function bookTrain() {
+      const from = document.getElementById('from').value;
+      const to = document.getElementById('to').value;
+      const date = document.getElementById('date').value;
+      const travelClass = document.getElementById('class').value;
+      const passenger = document.getElementById('passenger').value;
+      const age = document.getElementById('age').value;
+      const seats = document.getElementById('seats').value;
+
+      if (!from || !to || !date || !travelClass || !passenger || !age || !seats) {
+        alert("❗ Please fill out all fields.");
+        return;
+      }
+
+      const summary = document.getElementById('summary');
+      summary.style.display = "block";
+      summary.innerHTML = `
+        <h3>📄 Reservation Summary</h3>
+        <b>Name:</b> ${passenger}<br>
+        <b>Age:</b> ${age}<br>
+        <b>From:</b> ${from}<br>
+        <b>To:</b> ${to}<br>
+        <b>Travel Date:</b> ${date}<br>
+        <b>Class:</b> ${travelClass}<br>
+        <b>Tickets:</b> ${seats}<br>
+        <b>Status:</b> ✅ Confirmed
+      `;
+    }
+  </script>
+
+</body>
+</html>

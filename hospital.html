@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediConnect – Book Doctor Appointment</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 128, 128, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      color: #00796b;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 1rem;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004d40;
+    }
+
+    .confirmation {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #e0f2f1;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🏥 MediConnect</h1>
+    <form id="appointmentForm">
+      <label for="name">Patient Name</label>
+      <input type="text" id="name" placeholder="Enter full name" required>
+
+      <label for="contact">Contact Number</label>
+      <input type="text" id="contact" placeholder="10-digit mobile number" required>
+
+      <label for="department">Select Department</label>
+      <select id="department" onchange="populateDoctors()" required>
+        <option value="">-- Choose Department --</option>
+        <option value="Cardiology">Cardiology</option>
+        <option value="Dermatology">Dermatology</option>
+        <option value="Neurology">Neurology</option>
+        <option value="Pediatrics">Pediatrics</option>
+        <option value="General">General Medicine</option>
+      </select>
+
+      <label for="doctor">Select Doctor</label>
+      <select id="doctor" required>
+        <option value="">-- Select Doctor --</option>
+      </select>
+
+      <label for="date">Appointment Date</label>
+      <input type="date" id="date" required>
+
+      <label for="time">Appointment Time</label>
+      <input type="time" id="time" required>
+
+      <button type="submit">Book Appointment</button>
+    </form>
+
+    <div class="confirmation" id="confirmation" style="display: none;"></div>
+  </div>
+
+  <script>
+    const doctors = {
+      Cardiology: ["Dr. Heartwell", "Dr. Vascular"],
+      Dermatology: ["Dr. Skinner", "Dr. Derma"],
+      Neurology: ["Dr. Brainstorm", "Dr. Neurotech"],
+      Pediatrics: ["Dr. Kidcare", "Dr. Younghope"],
+      General: ["Dr. MediHelp", "Dr. Healmore"]
+    };
+
+    function populateDoctors() {
+      const dept = document.getElementById("department").value;
+      const doctorSelect = document.getElementById("doctor");
+      doctorSelect.innerHTML = `<option value="">-- Select Doctor --</option>`;
+      if (doctors[dept]) {
+        doctors[dept].forEach(doc => {
+          const option = document.createElement("option");
+          option.textContent = doc;
+          option.value = doc;
+          doctorSelect.appendChild(option);
+        });
+      }
+    }
+
+    document.getElementById("appointmentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const contact = document.getElementById("contact").value;
+      const dept = document.getElementById("department").value;
+      const doctor = document.getElementById("doctor").value;
+      const date = document.getElementById("date").value;
+      const time = document.getElementById("time").value;
+
+      const confirmation = document.getElementById("confirmation");
+      confirmation.style.display = "block";
+      confirmation.innerHTML = `
+        <h3>✅ Appointment Booked!</h3>
+        <strong>Patient:</strong> ${name}<br>
+        <strong>Contact:</strong> ${contact}<br>
+        <strong>Department:</strong> ${dept}<br>
+        <strong>Doctor:</strong> ${doctor}<br>
+        <strong>Date:</strong> ${date}<br>
+        <strong>Time:</strong> ${time}<br>
+        <strong>Status:</strong> Confirmed ✅. You’ll receive a reminder soon.
+      `;
+
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>

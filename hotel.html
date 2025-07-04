@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HotelEase - Book Your Room</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e0f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #006064;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      margin-top: 40px;
+    }
+    h2 {
+      color: #006064;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 12px 20px;
+      background: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #004d40;
+    }
+    .confirmation {
+      background: #c8e6c9;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HotelEase - Online Room Booking</h1>
+    <p>Book your stay in just a few clicks!</p>
+  </header>
+
+  <main>
+    <h2>Room Booking Form</h2>
+    <form id="bookingForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="checkin">Check-In Date:</label>
+      <input type="date" id="checkin" name="checkin" required />
+
+      <label for="checkout">Check-Out Date:</label>
+      <input type="date" id="checkout" name="checkout" required />
+
+      <label for="room">Room Type:</label>
+      <select id="room" name="room" required>
+        <option value="Standard">Standard</option>
+        <option value="Deluxe">Deluxe</option>
+        <option value="Suite">Suite</option>
+      </select>
+
+      <label for="guests">Number of Guests:</label>
+      <input type="number" id="guests" name="guests" min="1" max="10" required />
+
+      <button type="submit">Book Now</button>
+    </form>
+
+    <div id="confirmation" class="confirmation" style="display:none;"></div>
+  </main>
+
+  <script>
+    const form = document.getElementById('bookingForm');
+    const confirmation = document.getElementById('confirmation');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = form.name.value;
+      const checkin = form.checkin.value;
+      const checkout = form.checkout.value;
+      const room = form.room.value;
+      const guests = form.guests.value;
+
+      confirmation.style.display = 'block';
+      confirmation.innerHTML = `
+        <h3>Booking Confirmed! ✅</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Room Type:</strong> ${room}</p>
+        <p><strong>Guests:</strong> ${guests}</p>
+        <p><strong>Check-in:</strong> ${checkin}</p>
+        <p><strong>Check-out:</strong> ${checkout}</p>
+        <p>Thank you for choosing HotelEase. We look forward to your stay!</p>
+      `;
+      form.reset();
+    });
+  </script>
+</body>
+</html>
